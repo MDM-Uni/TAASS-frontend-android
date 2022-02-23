@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "544771957287",
+    "project_id": "taas-337911",
+    "storage_bucket": "taas-337911.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:544771957287:android:5fd2721617cb9ccd892402",
+        "android_client_info": {
+          "package_name": "com.example.taass_frontend_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "544771957287-ptg72gfe8kv4lql82u8lorg53qt0j5eb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDS__t4BULmtqwjL396PfW50EYknp_uQjc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "544771957287-glcoj4o4qn7o1np0q6e470mp0gktp0le.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

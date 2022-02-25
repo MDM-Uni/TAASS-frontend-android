@@ -40,6 +40,7 @@ dependencies:
   google_sign_in: ^5.2.4
   firebase_auth: ^3.3.7
   flutter_facebook_auth: ^4.1.1
+  flutter_svg: ^1.0.3
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +63,19 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/images/top_header.png
+
+  fonts:
+    - family: Montserrat Regular
+      fonts:
+        - asset: assets/fonts/mo_re.ttf
+
+    - family: Montserrat Medium
+      fonts:
+        - asset: assets/fonts/mo_me.ttf
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:

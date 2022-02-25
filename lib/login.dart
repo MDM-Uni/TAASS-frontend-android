@@ -4,15 +4,15 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class FormScreen extends StatefulWidget {
+class Login extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return FormScreenState();
+    return LoginScreenState();
   }
 }
 
-class FormScreenState extends State<FormScreen>{
+class LoginScreenState extends State<Login>{
 
   String? name;
   String? email;

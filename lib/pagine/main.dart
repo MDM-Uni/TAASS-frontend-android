@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dettaglianimale.dart';
 import 'login.dart';
 import 'dashboard.dart';
 
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget{
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: Dashboard(),
+      home: DettagliAnimale(),
     );
   }
 }

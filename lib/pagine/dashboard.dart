@@ -15,6 +15,10 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {},
+      ),
       resizeToAvoidBottomInset: true,
       body: Stack(
         children: <Widget>[
@@ -57,7 +61,7 @@ class _DashboardState extends State<Dashboard> {
                   SizedBox(height: 100),
                   Expanded(
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      padding: EdgeInsets.symmetric(vertical: 1.0),
                       child: ListView.builder(
                           shrinkWrap: true,
                         scrollDirection: Axis.vertical,
@@ -140,15 +144,7 @@ class _DashboardState extends State<Dashboard> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
-                  Container(
-                    color: Colors.indigoAccent,
-                    child: IconButton(
-                      icon: const Icon(Icons.add),
-                      color: Colors.white,
-                      onPressed: () {  },
-                    )
-                  ),
+
                 ],
               ),
             ),

@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:taass_frontend_android/pagine/dashboard.dart';
+
+import '../model/Utente.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -14,7 +17,7 @@ class Login extends StatefulWidget {
 
 class LoginScreenState extends State<Login>{
 
-  String? name;
+  String? nome;
   String? email;
   GoogleSignIn googleSignIn = GoogleSignIn(clientId: "544771957287-ptg72gfe8kv4lql82u8lorg53qt0j5eb.apps.googleusercontent.com");
 
@@ -59,9 +62,9 @@ class LoginScreenState extends State<Login>{
   void SignIn(String s) async{
     if(s == "Google"){
       var user = await googleSignIn.signIn();
-      name = user?.displayName;
+      nome = user?.displayName;
       email = user?.email;
-      print(name! + " " + email!);
+      Navigator.push(context, new MaterialPageRoute(builder: (__) => new Dashboard(nome!,email!)));
     } else if (s == "Facebook"){
 
     }

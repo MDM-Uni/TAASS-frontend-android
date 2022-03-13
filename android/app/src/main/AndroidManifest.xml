@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.taass_frontend_android">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="taass_frontend_android"
         android:icon="@mipmap/ic_launcher">

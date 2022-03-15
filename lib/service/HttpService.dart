@@ -14,8 +14,8 @@ class HttpService {
     throw Exception('Failed to load user information');
   }
 
-  Future<bool> removeAnimal(Animale animale) async {
-    final response = await http.delete(Uri.parse(URL + '/removeAnimal/' + animale.id.toString()));
+  Future<bool> removeAnimal(Utente utente, Animale animale) async {
+    final response = await http.delete(Uri.parse(URL + '/removeAnimal/' + utente.id.toString() + '/' + animale.id.toString()));
     if(response.statusCode == 200){
       return true;
     }
@@ -36,7 +36,7 @@ class HttpService {
   }
 
   Future<Utente> addAnimal(Animale animale) async {
-    final response = await http.get(Uri.parse(URL + '/removeAnimal/' + animale.id.toString()));
+    final response = await http.post(Uri.parse(URL + '/addAnimal'), body: jsonEncode(animale));
     if(response.statusCode == 200) {
       return Utente.fromJson(jsonDecode(response.body));
     }

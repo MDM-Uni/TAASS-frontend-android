@@ -30,7 +30,7 @@ class LoginScreenState extends State<Login>{
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text("Login")),
       body: Container(
-        margin: EdgeInsets.all(80),
+        margin: EdgeInsets.all(95),
         child: Form(
           key: formKey,
           child: Column(

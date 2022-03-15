@@ -4,7 +4,10 @@ import 'package:taass_frontend_android/model/Animale.dart';
 import 'package:intl/intl.dart';
 
 class DettagliAnimale extends StatefulWidget {
-  const DettagliAnimale({Key? key}) : super(key: key);
+  final Animale? animale;
+  final bool nuovo;
+
+  DettagliAnimale(this.animale, this.nuovo);
 
   @override
   _DettagliAnimaleState createState() => _DettagliAnimaleState();
@@ -16,11 +19,20 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
   final TextEditingController data = TextEditingController();
   final TextEditingController patologie = TextEditingController();
   final TextEditingController peso = TextEditingController();
+  final TextEditingController razza = TextEditingController();
+  late bool peloPungo = this.widget.animale!.peloLungo;
 
 
   @override
   void initState() {
     // TODO: implement initState
+    if(!widget.nuovo){
+      nome.text = widget.animale?.nome ?? '';
+      data.text = widget.animale?.dataDiNascita.toString().substring(0,10) ?? '';
+      patologie.text = widget.animale?.patologie.toString() ?? '';
+      razza.text = widget.animale?.razza ?? '';
+      peso.text = widget.animale?.peso.toString() ?? '';
+    }
     super.initState();
   }
 
@@ -32,7 +44,7 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.save),
-        onPressed: aggiornaAnimale,
+        onPressed: (){},
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -59,12 +71,17 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
               ),
             ),
             CasellaTesto(patologie, "Patologie"),
+            CasellaTesto(razza, "Razza"),
             CasellaTesto(peso, "Peso"),
             CheckboxListTile(
               title: Text("Pelo lungo"),
               checkColor: Colors.greenAccent,
-              value: true,
-                onChanged: (newValue) { },
+              value: this.peloPungo,
+              onChanged: (bool? value){
+                setState(() {
+                  this.peloPungo = value!;
+                });
+              },
             )
           ],
         ),
@@ -72,7 +89,9 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
     );
   }
 
-  Future aggiornaAnimale() async{
+
+  static void onChanged(bool? value) {
+
   }
 
 }

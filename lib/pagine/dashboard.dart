@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:taass_frontend_android/model/Animale.dart';
 import 'package:taass_frontend_android/model/Utente.dart';
 import 'package:taass_frontend_android/pagine/dettaglianimale.dart';
 import 'package:taass_frontend_android/service/HttpService.dart';
@@ -34,7 +35,8 @@ class _DashboardState extends State<Dashboard> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.push(context, new MaterialPageRoute(builder: (__) => new DettagliAnimale()));
+          Animale animale = new Animale(0, '', DateTime.now() , [], '', 0, false);
+          Navigator.push(context, new MaterialPageRoute(builder: (__) => new DettagliAnimale(animale,true)));
         },
       ),
       resizeToAvoidBottomInset: true,
@@ -103,9 +105,8 @@ class _DashboardState extends State<Dashboard> {
                                 direction: DismissDirection.endToStart,
                                 onDismissed: (_) {
                                   setState(() {
-                                    //myProducts.removeAt(index);
-                                    //richiesta elimazione animale
-                                    httpService.removeAnimal(snapshot.data!.animali[index]);
+                                    httpService.removeAnimal(snapshot.data!,snapshot.data!.animali[index]);
+                                    snapshot.data!.animali.removeAt(index);
                                     print('Eliminato correttamente');
                                     });
                                 },
@@ -153,7 +154,11 @@ class _DashboardState extends State<Dashboard> {
                                             padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                                             child: FlatButton(
                                               onPressed: () {
-                                                Navigator.push(context, new MaterialPageRoute(builder: (__) => new DettagliAnimale()));
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) => DettagliAnimale(snapshot.data!.animali[index],false),
+                                                    ));
                                               },
                                               color: Colors.blue,
                                               shape: RoundedRectangleBorder(

@@ -2,12 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:taass_frontend_android/model/Animale.dart';
 import 'package:intl/intl.dart';
+import 'package:taass_frontend_android/model/Utente.dart';
+import 'dart:convert';
+
+import '../service/HttpService.dart';
+import 'dashboard.dart';
 
 class DettagliAnimale extends StatefulWidget {
-  final Animale? animale;
+  final Animale animale;
   final bool nuovo;
+  late Utente utente;
 
-  DettagliAnimale(this.animale, this.nuovo);
+  DettagliAnimale(this.utente, this.animale, this.nuovo);
 
   @override
   _DettagliAnimaleState createState() => _DettagliAnimaleState();
@@ -20,18 +26,19 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
   final TextEditingController patologie = TextEditingController();
   final TextEditingController peso = TextEditingController();
   final TextEditingController razza = TextEditingController();
-  late bool peloPungo = this.widget.animale!.peloLungo;
+  late bool peloPungo = this.widget.animale.peloLungo;
+  HttpService httpService = HttpService();
 
 
   @override
   void initState() {
     // TODO: implement initState
     if(!widget.nuovo){
-      nome.text = widget.animale?.nome ?? '';
-      data.text = widget.animale?.dataDiNascita.toString().substring(0,10) ?? '';
-      patologie.text = widget.animale?.patologie.toString() ?? '';
-      razza.text = widget.animale?.razza ?? '';
-      peso.text = widget.animale?.peso.toString() ?? '';
+      nome.text = widget.animale.nome ?? '';
+      data.text = widget.animale.dataDiNascita.toString().substring(0,10) ?? '';
+      patologie.text = widget.animale.patologie.join(',').toString() ?? '';
+      razza.text = widget.animale.razza ?? '';
+      peso.text = widget.animale.peso.toString() ?? '';
     }
     super.initState();
   }
@@ -44,7 +51,21 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.save),
-        onPressed: (){},
+        onPressed: () async {
+          late Animale _animale;
+          if(widget.nuovo){
+            _animale = Animale(0, nome.text, DateTime.parse(data.text), patologie.text.split(","), razza.text, num.parse(peso.text), peloPungo);
+            widget.utente = await httpService.addAnimal(widget.utente, _animale);
+            Navigator.push(context, new MaterialPageRoute(builder: (__) => new Dashboard(widget.utente)));
+          } else {
+            //httpService.updateAnimal(widget.animale,_animale);
+            _animale = Animale(widget.animale.id, nome.text, DateTime.parse(data.text), patologie.text.split(","), razza.text, num.parse(peso.text), peloPungo);
+            _animale = await httpService.updateAnimal(widget.utente,widget.animale,_animale);
+            widget.utente.animali.remove(widget.animale);
+            widget.utente.animali.add(_animale);
+            Navigator.push(context, new MaterialPageRoute(builder: (__) => new Dashboard(widget.utente)));
+          }
+        },
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -87,11 +108,6 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
         ),
       ),
     );
-  }
-
-
-  static void onChanged(bool? value) {
-
   }
 
 }

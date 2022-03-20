@@ -22,8 +22,8 @@ class HttpService {
     return false;
   }
 
-  Future<Animale> updateAnimal(Animale animale, Animale animaleAggiornato) async{
-    final response = await http.put(Uri.parse(URL + '/removeAnimal/' + animale.id.toString()),
+  Future<Animale> updateAnimal(Utente utente, Animale animale, Animale animaleAggiornato) async{
+    final response = await http.put(Uri.parse(URL + '/updateAnimal/' + utente.id.toString() + '/' + animale.id.toString()),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -35,8 +35,13 @@ class HttpService {
     throw Exception('Failed to remove animal');
   }
 
-  Future<Utente> addAnimal(Animale animale) async {
-    final response = await http.post(Uri.parse(URL + '/addAnimal'), body: jsonEncode(animale));
+  Future<Utente> addAnimal(Utente utente,Animale animale) async {
+    print(jsonEncode(animale));
+    final response = await http.post(Uri.parse(URL + '/addAnimal/' + utente.id.toString()),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(animale));
     if(response.statusCode == 200) {
       return Utente.fromJson(jsonDecode(response.body));
     }

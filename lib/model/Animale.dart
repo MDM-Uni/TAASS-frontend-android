@@ -18,6 +18,17 @@ class Animale {
     return 'Animale{id: $id, nome: $nome, dataDiNascita: $dataDiNascita, patologie: $patologie, razza: $razza, peso: $peso, peloLungo: $peloLungo}';
   }
 
+  Map<String, dynamic> toJson(){
+    return {
+      'nome': nome,
+      'dataDiNascita': dataDiNascita.toIso8601String(),
+      'patologie' : patologie,
+      'razza' : razza,
+      'peso' : peso,
+      'peloLungo' : peloLungo,
+    };
+  }
+
   Animale.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         nome = json['nome'],

@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:taass_frontend_android/pagine/dashboard.dart';
 
 import '../model/Utente.dart';
+import '../service/HttpService.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -19,6 +20,7 @@ class LoginScreenState extends State<Login>{
 
   String? nome;
   String? email;
+  HttpService httpService = HttpService();
   GoogleSignIn googleSignIn = GoogleSignIn(clientId: "544771957287-ptg72gfe8kv4lql82u8lorg53qt0j5eb.apps.googleusercontent.com");
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -64,7 +66,9 @@ class LoginScreenState extends State<Login>{
       var user = await googleSignIn.signIn();
       nome = user?.displayName;
       email = user?.email;
-      Navigator.push(context, new MaterialPageRoute(builder: (__) => new Dashboard(nome!,email!)));
+      Utente utente = new Utente(0, nome!, email!,[]);
+      utente = await httpService.getUtente(utente);
+      Navigator.push(context, new MaterialPageRoute(builder: (__) => new Dashboard(utente)));
     } else if (s == "Facebook"){
 
     }

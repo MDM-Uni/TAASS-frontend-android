@@ -18,6 +18,7 @@ class Login extends StatefulWidget {
 
 class LoginScreenState extends State<Login>{
 
+  Map? _userData;
   String? nome;
   String? email;
   HttpService httpService = HttpService();
@@ -70,7 +71,18 @@ class LoginScreenState extends State<Login>{
       utente = await httpService.getUtente(utente);
       Navigator.push(context, new MaterialPageRoute(builder: (__) => new Dashboard(utente)));
     } else if (s == "Facebook"){
-
+      final result = await FacebookAuth.i.login(
+        permissions: ["public_profile", "email"]
+      );
+      if(result.status == LoginStatus.success){
+        _userData = await FacebookAuth.i.getUserData(
+          fields: "email,name"
+        );
+        var user = _userData?.values.toList();
+        Utente utente = new Utente(0,user![1],user![0],[]);
+        utente = await httpService.getUtente(utente);
+        Navigator.push(context, new MaterialPageRoute(builder: (__) => new Dashboard(utente)));
+      }
     }
 
   }

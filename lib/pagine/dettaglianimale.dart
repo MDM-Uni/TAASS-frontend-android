@@ -163,6 +163,7 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
                                   _patologie.removeAt(index-1);
                               });
                             }
+                            else {patologie.text = "";}
                           }, icon: Icon(Icons.clear)),
                           IconButton(onPressed: (){
                             setState(() {

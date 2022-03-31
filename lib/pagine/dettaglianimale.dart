@@ -74,6 +74,7 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
               if(pat.text != ""){
                 patologia.add(pat.text);
               }
+              patologia.add(pat.text);
             }
             _animale = Animale(widget.animale.id, nome.text, DateTime.parse(data.text), patologia, razza.text, num.parse(peso.text), peloPungo);
             _animale = await httpService.updateAnimal(widget.utente,widget.animale,_animale);

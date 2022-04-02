@@ -3,15 +3,15 @@ import 'dart:ffi';
 class Animale {
   int id;
   String nome;
-  DateTime dataDiNascita;
-  List<String> patologie;
-  String razza;
-  num peso;
-  bool peloLungo;
+  DateTime? dataDiNascita;
+  List<String>? patologie;
+  String? razza;
+  num? peso;
+  bool? peloLungo;
 
 
-  Animale(this.id,this.nome, this.dataDiNascita, this.patologie, this.razza, this.peso,
-      this.peloLungo);
+  Animale({required this.id,required this.nome, this.dataDiNascita, this.patologie, this.razza, this.peso,
+      this.peloLungo});
 
   @override
   String toString() {
@@ -21,7 +21,7 @@ class Animale {
   Map<String, dynamic> toJson(){
     return {
       'nome': nome,
-      'dataDiNascita': dataDiNascita.toIso8601String(),
+      'dataDiNascita': dataDiNascita!.toIso8601String(),
       'patologie' : patologie,
       'razza' : razza,
       'peso' : peso,

@@ -60,6 +60,19 @@ class Visita {
         throw "Errore nella conversione da string ($tipo) a TipoVisita";
     }
   }
+
+  static String tipoVisitaToString(tipoVisita) {
+    switch (tipoVisita) {
+      case TipoVisita.OPERAZIONE:
+        return "operazione";
+      case TipoVisita.CONTROLLO:
+        return "controllo";
+      case TipoVisita.VACCINO:
+        return "vaccino";
+      default:
+        throw "Errore nella conversione in String del TipoVisita";
+    }
+  }
 }
 
 enum TipoVisita {

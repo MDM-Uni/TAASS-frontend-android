@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dettaglianimale.dart';
-import 'login.dart';
-import 'dashboard.dart';
+import 'pagine/dettagli_animale.dart';
+import 'pagine/login.dart';
+import 'pagine/dashboard.dart';
 
 void main() {
   runApp(MyApp());

@@ -5,8 +5,8 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:taass_frontend_android/pagine/dashboard.dart';
 
-import '../model/Utente.dart';
-import '../service/HttpService.dart';
+import '../model/utente.dart';
+import '../service/http_service.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -79,7 +79,7 @@ class LoginScreenState extends State<Login>{
           fields: "email,name"
         );
         var user = _userData?.values.toList();
-        Utente utente = new Utente(0,user![1],user![0],[]);
+        Utente utente = new Utente(0,user![1],user[0],[]);
         utente = await httpService.getUtente(utente);
         Navigator.push(context, new MaterialPageRoute(builder: (__) => new Dashboard(utente)));
       }

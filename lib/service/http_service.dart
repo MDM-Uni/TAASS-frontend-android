@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:taass_frontend_android/model/Animale.dart';
-import 'package:taass_frontend_android/model/Utente.dart';
+import 'package:taass_frontend_android/model/animale.dart';
+import 'package:taass_frontend_android/model/utente.dart';
 import 'package:http/http.dart' as http;
 
 class HttpService {

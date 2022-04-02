@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:taass_frontend_android/model/Animale.dart';
+import 'package:taass_frontend_android/model/animale.dart';
 import 'package:intl/intl.dart';
-import 'package:taass_frontend_android/model/Utente.dart';
+import 'package:taass_frontend_android/model/utente.dart';
 import 'dart:convert';
 
-import '../service/HttpService.dart';
+import '../service/http_service.dart';
 import 'dashboard.dart';
 
 class DettagliAnimale extends StatefulWidget {
@@ -36,8 +36,8 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
   void initState() {
     // TODO: implement initState
     if(!widget.nuovo){
-      nome.text = widget.animale.nome ?? '';
-      data.text = widget.animale.dataDiNascita.toString().substring(0,10) ?? '';
+      nome.text = widget.animale.nome;
+      data.text = widget.animale.dataDiNascita.toString().substring(0,10);
       if(widget.animale.patologie.isNotEmpty) {
         _patologie.clear();
         for (var patologia in widget.animale.patologie){
@@ -46,8 +46,8 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
           _patologie.add(controller);
         }
       }
-      razza.text = widget.animale.razza ?? '';
-      peso.text = widget.animale.peso.toString() ?? '';
+      razza.text = widget.animale.razza;
+      peso.text = widget.animale.peso.toString();
     }
     super.initState();
   }

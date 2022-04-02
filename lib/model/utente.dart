@@ -1,4 +1,4 @@
-import 'package:taass_frontend_android/model/Animale.dart';
+import 'package:taass_frontend_android/model/animale.dart';
 
 class Utente {
   int id;

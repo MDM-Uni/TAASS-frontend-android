@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:taass_frontend_android/model/Animale.dart';
-import 'package:taass_frontend_android/model/Utente.dart';
+import 'package:taass_frontend_android/model/animale.dart';
+import 'package:taass_frontend_android/model/utente.dart';
 import 'package:http/http.dart' as http;
 
 class HttpService {
-  final String URL = "http://10.0.2.2:8080";
+  final String URL = "http://localhost:8080";
 
   Future<Utente> getUtente(Utente utente) async {
     final response = await http.get(Uri.parse(URL + '/user/' + utente.email + '/' + utente.nome));

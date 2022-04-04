@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:taass_frontend_android/model/Animale.dart';
-import 'package:taass_frontend_android/model/Utente.dart';
-import 'package:taass_frontend_android/pagine/dettaglianimale.dart';
-import 'package:taass_frontend_android/service/HttpService.dart';
+import 'package:taass_frontend_android/model/animale.dart';
+import 'package:taass_frontend_android/model/utente.dart';
+import 'package:taass_frontend_android/pagine/dettagli_animale.dart';
+import 'package:taass_frontend_android/service/http_service.dart';
 
 class Dashboard extends StatefulWidget {
   late Utente user;

@@ -158,20 +158,22 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          IconButton(onPressed: (){
-                            if(_patologie.length>1){
-                              setState(() {
+                          if(index !=0)
+                            IconButton(onPressed: (){
+                              if(_patologie.length>1){
+                                setState(() {
                                   _patologie.removeAt(index-1);
+                                });
+                              }
+                              else {patologie.text = "";}
+                            }, icon: Icon(Icons.clear)),
+                          if(this._patologie.length == index)
+                            IconButton(onPressed: (){
+                              setState(() {
+                                final controller = TextEditingController();
+                                _patologie.add(controller);
                               });
-                            }
-                            else {patologie.text = "";}
-                          }, icon: Icon(Icons.clear)),
-                          IconButton(onPressed: (){
-                            setState(() {
-                              final controller = TextEditingController();
-                              _patologie.add(controller);
-                            });
-                          }, icon: Icon(Icons.add)),
+                            }, icon: Icon(Icons.add)),
                         ],
                       ),
                     ),

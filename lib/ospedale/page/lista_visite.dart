@@ -5,12 +5,10 @@ import 'package:taass_frontend_android/ospedale/model/visita.dart';
 import 'package:taass_frontend_android/ospedale/service/visite_service.dart';
 
 class ListaVisite extends StatefulWidget {
-
   const ListaVisite({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _ListaVisiteState();
-
 }
 
 class _ListaVisiteState extends State<ListaVisite> {
@@ -45,16 +43,18 @@ class _ListaVisiteState extends State<ListaVisite> {
     return Card(
       child: ExpansionTile(
           title: Text(
-              ' ${Visita.tipoVisitaToString(visita.tipoVisita)} per ${visita
-                  .animale.nome}'),
+              ' ${Visita.tipoVisitaToString(visita.tipoVisita)} per ${visita.animale.nome}'),
           children: <Widget>[
             const Divider(),
             visitaField('🆔', 'Id', visita.id.toString()),
             visitaField('🗓', 'Data', visita.data.toString()),
             visitaField(' ', 'Durata', visita.durataInMinuti.toString()),
-            if (visita.note!=null) visitaField('📒', 'Note', visita.note!),
+            if (visita.note != null) visitaField('📒', 'Note', visita.note!),
             const Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 7))
-          ]),
+          ],
+          trailing: IconButton(
+              onPressed: () => eliminaVisita(visita),
+              icon: const Icon(Icons.delete))),
     );
   }
 
@@ -65,10 +65,17 @@ class _ListaVisiteState extends State<ListaVisite> {
           padding: const EdgeInsets.fromLTRB(15, 2, 40, 0),
           child: Row(children: [
             Expanded(flex: 4, child: Html(data: '<strong>$name</strong>:')),
-            Expanded(flex: 10,
-                child: Html(
-                    data: emoji != null ? '$emoji $value' : '  $value'))
+            Expanded(
+                flex: 10,
+                child: Html(data: emoji != null ? '$emoji $value' : '  $value'))
           ])),
     );
+  }
+
+  eliminaVisita(Visita visitaDaEliminare) {
+    //VisiteService.deleteVisita(visita);
+    setState(() {
+      visite = visite.then((visite_) => visite_.where((visita) => visita != visitaDaEliminare).toList());
+    });
   }
 }

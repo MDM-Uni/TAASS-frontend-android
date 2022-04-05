@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:intl/intl.dart';
 import 'package:taass_frontend_android/ospedale/model/animale.dart';
 import 'package:taass_frontend_android/ospedale/model/utente.dart';
 import 'package:taass_frontend_android/ospedale/model/visita.dart';
@@ -54,11 +55,12 @@ class _ListaVisiteState extends State<ListaVisite> {
     return Card(
       child: ExpansionTile(
           title: Text(
-              ' ${Visita.tipoVisitaToString(visita.tipoVisita)} per ${visita.animale.nome}'),
+              ' ${Visita.tipoVisitaToString(visita.tipoVisita)} per ${visita
+                  .animale.nome}'),
           children: <Widget>[
             const Divider(),
             visitaField('🆔', 'Id', visita.id.toString()),
-            visitaField('🗓', 'Data', visita.data.toString()),
+            visitaField('🗓', 'Data', DateFormat('dd/MM/yyyy HH:mm').format(visita.data)),
             visitaField(' ', 'Durata', visita.durataInMinuti.toString()),
             if (visita.note != null) visitaField('📒', 'Note', visita.note!),
             const Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 7))
@@ -84,10 +86,14 @@ class _ListaVisiteState extends State<ListaVisite> {
   }
 
   eliminaVisita(Visita visitaDaEliminare) {
-    //VisiteService.deleteVisita(visita);
-    setState(() {
-      visite = visite.then((visite_) =>
-          visite_.where((visita) => visita != visitaDaEliminare).toList());
+    Future<bool> res = VisiteService.deleteVisita(visitaDaEliminare);
+    res.then((successo) => {
+      if (successo) {
+        setState(() {
+          visite = visite.then((visite_) =>
+            visite_.where((visita) => visita != visitaDaEliminare).toList());
+        })
+      }
     });
   }
 }

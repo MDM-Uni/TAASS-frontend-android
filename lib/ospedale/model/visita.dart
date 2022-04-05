@@ -16,13 +16,14 @@ class Visita {
       this.note,
       required this.tipoVisita});
 
-  Map<String, dynamic> toJson() {
+  Map<String, String> toJson() {
     return {
-      'id': id,
-      'idAnimale': animale.id,
-      'data': data.toString(),
-      'note': note,
-      'tipoVisita': tipoVisita.toString(),
+      if(id!=null) 'id': id.toString(),
+      'idAnimale': animale.id.toString(),
+      'data': data.toIso8601String(),
+      'durataInMinuti': durataInMinuti.toString(),
+      if (note!= null) 'note': note!,
+      'tipoVisita': tipoVisitaToString(tipoVisita).toUpperCase(),
     };
   }
 

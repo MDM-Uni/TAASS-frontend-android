@@ -1,7 +1,7 @@
 import 'animale.dart';
 
 class Visita {
-  double? id;
+  int? id;
   Animale animale;
   DateTime data;
   int durataInMinuti;
@@ -26,10 +26,9 @@ class Visita {
     };
   }
 
-  Visita.fromJson(Map<String, dynamic> json)
+  Visita.fromJson(Map<String, dynamic> json, List<Animale> animali)
       : id = json['id'],
-        animale = json['idAnimale'],
-        //todo fare chiamata al service degli animali
+        animale = animali.firstWhere((animale) => animale.id == json['idAnimale']),
         data = DateTime.parse(json['data']),
         durataInMinuti = json['durataInMinuti'],
         note = json['note'],

@@ -1,25 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:taass_frontend_android/ospedale/model/animale.dart';
 import 'package:taass_frontend_android/ospedale/model/utente.dart';
 import 'package:taass_frontend_android/ospedale/model/visita.dart';
 import 'package:taass_frontend_android/ospedale/service/visite_service.dart';
 
 class ListaVisite extends StatefulWidget {
-  const ListaVisite({Key? key}) : super(key: key);
+  ListaVisite({Key? key}) : super(key: key);
+  final Utente utente = Utente(
+      1,
+      'marcoscale98@gmail.com',
+      'Marco Scale',
+      List.of([
+        Animale(id: 2, nome: 'Leo'),
+        Animale(id: 3, nome: 'Pippo'),
+        Animale(id: 5, nome: 'oiohui'),
+      ]));
 
   @override
-  State<StatefulWidget> createState() => _ListaVisiteState();
+  State<StatefulWidget> createState() => _ListaVisiteState(utente);
 }
 
 class _ListaVisiteState extends State<ListaVisite> {
   late Future<List<Visita>> visite;
+  Utente utente;
 
-  _ListaVisiteState();
+  _ListaVisiteState(this.utente);
 
   @override
   void initState() {
     super.initState();
-    visite = VisiteService.getVisite();
+    visite = VisiteService.getVisite(utente.animali, null, null);
   }
 
   @override
@@ -75,7 +86,8 @@ class _ListaVisiteState extends State<ListaVisite> {
   eliminaVisita(Visita visitaDaEliminare) {
     //VisiteService.deleteVisita(visita);
     setState(() {
-      visite = visite.then((visite_) => visite_.where((visita) => visita != visitaDaEliminare).toList());
+      visite = visite.then((visite_) =>
+          visite_.where((visita) => visita != visitaDaEliminare).toList());
     });
   }
 }

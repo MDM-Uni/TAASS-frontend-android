@@ -64,11 +64,11 @@ class Visita {
   static String tipoVisitaToString(tipoVisita) {
     switch (tipoVisita) {
       case TipoVisita.OPERAZIONE:
-        return "operazione";
+        return "Operazione";
       case TipoVisita.CONTROLLO:
-        return "controllo";
+        return "Controllo";
       case TipoVisita.VACCINO:
-        return "vaccino";
+        return "Vaccino";
       default:
         throw "Errore nella conversione in String del TipoVisita";
     }

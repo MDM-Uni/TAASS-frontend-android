@@ -69,6 +69,7 @@ flutter:
 
   assets:
     - assets/images/top_header.png
+    - assets/images/pet_life_logo_idea_2.png
 
   fonts:
     - family: Montserrat Regular

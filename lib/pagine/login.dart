@@ -39,6 +39,14 @@ class LoginScreenState extends State<Login>{
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              Container(
+                height: 150,
+                width: 250,
+                child: Center(
+                  child: Image.asset('assets/images/pet_life_logo_idea_2.png'),
+                ),
+              ),
+              SizedBox(height: 50),
               SignInButton(
                 Buttons.Google,
                 text: "Accedi con Google",

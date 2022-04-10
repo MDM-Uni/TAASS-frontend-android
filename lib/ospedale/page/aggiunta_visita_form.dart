@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:taass_frontend_android/ospedale/model/animale.dart';
 import 'package:taass_frontend_android/ospedale/model/utente.dart';
 import 'package:taass_frontend_android/ospedale/model/visita.dart';
+import 'package:taass_frontend_android/ospedale/service/visite_service.dart';
 
 class AggiuntaVisitaForm extends StatefulWidget {
   AggiuntaVisitaForm({Key? key}) : super(key: key);
@@ -40,59 +41,67 @@ class _AggiuntaVisitaFormState extends State<AggiuntaVisitaForm> {
       durataInMinuti: 30,
     );
     dataController.text = DateFormat('dd/MM/yyyy HH:mm').format(visita.data);
-
   }
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            //scelta animale
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: buildSceltaAnimaleInputWidget(),
-            ),
-            //scelta data e ora
-            Padding(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Aggiunta visite'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      body: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              //scelta animale
+              Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: buildDataOraInputWidget(context)),
-            //scelta tipoVisita
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: buildSceltaTipoVisitaInputWidget(),
-            ),
-            //durata
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: buildDurataInputWidget(),
-            ),
-            //note
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                decoration: const InputDecoration.collapsed(hintText: 'Note'),
-                initialValue: '',
-                onChanged: (new_value) {
-                  if (new_value != null && new_value != '') {
-                    setState(() {
-                      visita.note = new_value;
-                    });
-                  }
-                },
+                child: buildSceltaAnimaleInputWidget(),
               ),
-            ),
-            //bottone prenotazione
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: ElevatedButton(
-                onPressed: () => prenotaVisita(),
-                child: const Text('Prenota'),
+              //scelta data e ora
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: buildDataOraInputWidget(context)),
+              //scelta tipoVisita
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: buildSceltaTipoVisitaInputWidget(),
               ),
-            ),
-          ],
-        ));
+              //durata
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: buildDurataInputWidget(),
+              ),
+              //note
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  decoration: const InputDecoration.collapsed(hintText: 'Note'),
+                  initialValue: '',
+                  onChanged: (newValue) {
+                    if (newValue != null && newValue != '') {
+                      setState(() {
+                        visita.note = newValue;
+                      });
+                    }
+                  },
+                ),
+              ),
+              //bottone prenotazione
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: ElevatedButton(
+                  onPressed: () => prenotaVisita(),
+                  child: const Text('Prenota'),
+                ),
+              ),
+            ],
+          )),
+    );
   }
 
   Row buildDurataInputWidget() {
@@ -115,8 +124,8 @@ class _AggiuntaVisitaFormState extends State<AggiuntaVisitaForm> {
                 visita.durataInMinuti = value.toInt();
               });
             },
-            validator: (new_value) {
-              if (new_value == null) {
+            validator: (newValue) {
+              if (newValue == null) {
                 return "Inserire una durata della visita valida (compresa tra 1 minuto e 180 minuti)";
               }
               return null;
@@ -145,8 +154,8 @@ class _AggiuntaVisitaFormState extends State<AggiuntaVisitaForm> {
           });
         }
       },
-      validator: (new_value) {
-        if (new_value == null || new_value == '') {
+      validator: (newValue) {
+        if (newValue == null || newValue == '') {
           return 'Selezionare il tipo della visita';
         }
         return null;
@@ -166,10 +175,10 @@ class _AggiuntaVisitaFormState extends State<AggiuntaVisitaForm> {
           )
       ],
       onTap: () {},
-      onChanged: (new_value) {
+      onChanged: (newValue) {
         setState() {
-          if (new_value != null) {
-            visita.animale = new_value;
+          if (newValue != null) {
+            visita.animale = newValue;
           }
         }
       },
@@ -197,7 +206,7 @@ class _AggiuntaVisitaFormState extends State<AggiuntaVisitaForm> {
             decoration: const InputDecoration.collapsed(
                 hintText: 'Seleziona data e ora'),
             onTap: () {
-              seleziona_data(context);
+              selezionaData(context);
             },
             keyboardType: TextInputType.none,
             validator: (value) {
@@ -212,7 +221,7 @@ class _AggiuntaVisitaFormState extends State<AggiuntaVisitaForm> {
     );
   }
 
-  void seleziona_data(BuildContext context) {
+  void selezionaData(BuildContext context) {
     Future<DateTime?> dataScelta = DatePicker.showDateTimePicker(context,
         minTime: DateTime.now(),
         maxTime: DateTime.now().add(const Duration(days: 400)),
@@ -233,10 +242,16 @@ class _AggiuntaVisitaFormState extends State<AggiuntaVisitaForm> {
 
   prenotaVisita() {
     if (_formKey.currentState!.validate()) {
-      //todo inviare visita con Visita_Service
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Processing Data')),
-      );
+      Future<int?> res = VisiteService.postVisita(visita);
+      res.then((id) {
+        if (id != null) {
+          //visualizzo a schermo una snackbar
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Visita aggiunta')),
+          );
+          visita.id = id;
+        }
+      });
     }
   }
 }

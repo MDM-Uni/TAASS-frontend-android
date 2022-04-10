@@ -6,6 +6,8 @@ import 'package:taass_frontend_android/ospedale/model/utente.dart';
 import 'package:taass_frontend_android/ospedale/model/visita.dart';
 import 'package:taass_frontend_android/ospedale/service/visite_service.dart';
 
+import 'aggiunta_visita_form.dart';
+
 class ListaVisite extends StatefulWidget {
   ListaVisite({Key? key}) : super(key: key);
   final Utente utente = Utente(
@@ -36,18 +38,30 @@ class _ListaVisiteState extends State<ListaVisite> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Visita>>(
-      future: visite,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return ListView(
-              padding: const EdgeInsets.all(8),
-              children: snapshot.data!.map(visiteCard).toList());
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
-        return const Center(child: CircularProgressIndicator());
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Lista visite'),
+      ),
+      body: FutureBuilder<List<Visita>>(
+        future: visite,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView(
+                padding: const EdgeInsets.all(8),
+                children: snapshot.data!.map(visiteCard).toList());
+          } else if (snapshot.hasError) {
+            return Text('${snapshot.error}');
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => AggiuntaVisitaForm()));
+        },
+      ),
     );
   }
 
@@ -55,13 +69,13 @@ class _ListaVisiteState extends State<ListaVisite> {
     return Card(
       child: ExpansionTile(
           title: Text(
-              ' ${Visita.tipoVisitaToString(visita.tipoVisita)} per ${visita
-                  .animale.nome}'),
+              ' ${Visita.tipoVisitaToString(visita.tipoVisita)} per ${visita.animale.nome}'),
           children: <Widget>[
             const Divider(),
-            visitaField('🆔', 'Id', visita.id.toString()),
-            visitaField('🗓', 'Data', DateFormat('dd/MM/yyyy HH:mm').format(visita.data)),
+            visitaField('🗓', 'Data',
+                DateFormat('dd/MM/yyyy HH:mm').format(visita.data)),
             visitaField(' ', 'Durata', visita.durataInMinuti.toString()),
+            visitaField(' ', 'Tipo Visita', Visita.tipoVisitaToString(visita.tipoVisita)),
             if (visita.note != null) visitaField('📒', 'Note', visita.note!),
             const Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 7))
           ],
@@ -88,12 +102,16 @@ class _ListaVisiteState extends State<ListaVisite> {
   eliminaVisita(Visita visitaDaEliminare) {
     Future<bool> res = VisiteService.deleteVisita(visitaDaEliminare);
     res.then((successo) => {
-      if (successo) {
-        setState(() {
-          visite = visite.then((visite_) =>
-            visite_.where((visita) => visita != visitaDaEliminare).toList());
-        })
-      }
-    });
+          if (successo)
+            {
+              setState(() {
+                visite = visite.then((visite_) => visite_
+                    .where((visita) => visita != visitaDaEliminare)
+                    .toList());
+              })
+            }
+        });
   }
+
+
 }

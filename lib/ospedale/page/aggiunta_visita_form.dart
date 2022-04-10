@@ -50,7 +50,7 @@ class _AggiuntaVisitaFormState extends State<AggiuntaVisitaForm> {
         title: Text('Aggiunta visite'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.of(context).pop(null),
         ),
       ),
       body: Form(
@@ -119,7 +119,7 @@ class _AggiuntaVisitaFormState extends State<AggiuntaVisitaForm> {
             value: visita.durataInMinuti.toDouble(),
             keyboardType: TextInputType.number,
             onChanged: (value) {
-              log('durata settata a $value');
+              //log('durata settata a $value');
               setState(() {
                 visita.durataInMinuti = value.toInt();
               });
@@ -250,6 +250,7 @@ class _AggiuntaVisitaFormState extends State<AggiuntaVisitaForm> {
             const SnackBar(content: Text('Visita aggiunta')),
           );
           visita.id = id;
+          Navigator.pop(context, visita);
         }
       });
     }

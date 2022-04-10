@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
@@ -58,8 +60,21 @@ class _ListaVisiteState extends State<ListaVisite> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          Navigator.push(context,
+          Future <Visita?> visitaAggiunta = Navigator.push(context,
               MaterialPageRoute(builder: (context) => AggiuntaVisitaForm()));
+          visitaAggiunta.then((visitaAggiunta_) {
+            if(visitaAggiunta_ != null) {
+              setState(() {
+                visite = visite.then((visite_) {
+                  visite_.add(visitaAggiunta_);
+                  return visite_;
+                }).then((visite_) {
+                  //log(visite_.toString());
+                  return visite_;
+                });
+              });
+            }
+          });
         },
       ),
     );

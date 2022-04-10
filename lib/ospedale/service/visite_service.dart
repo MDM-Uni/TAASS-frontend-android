@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer' as developer;
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:taass_frontend_android/ospedale/model/animale.dart';
 import 'package:taass_frontend_android/ospedale/model/visita.dart';
@@ -8,8 +9,8 @@ import 'package:http/http.dart' as http;
 class VisiteService {
   static const String basicUrl = '10.0.2.2:8081';
 
-  static Future<List<Visita>> getVisite(List<Animale> animaliDiUtente,
-      int? idAnimale, TipoVisita? tipoVisita) async {
+  static Future<List<Visita>> getVisite(
+      List<Animale> animaliDiUtente, int? idAnimale, TipoVisita? tipoVisita) {
     final Map<String, String> parametri = {};
     if (idAnimale != null) {
       parametri["idAnimale"] = idAnimale.toString();
@@ -19,9 +20,14 @@ class VisiteService {
     }
     Uri url =
         Uri.http(VisiteService.basicUrl, '/ospedale/getVisite', parametri);
-    final response = await http.get(url);
-    if (response.statusCode == 200) {
-      List lista_json = jsonDecode(response.body);
+    final response = http.get(url);
+    return gestisciRispostaGetVisite(response, animaliDiUtente);
+  }
+
+  static Future<List<Visita>> gestisciRispostaGetVisite(
+      Future<Response> response, List<Animale> animaliDiUtente) {
+    return response.then((response_) {
+      List lista_json = jsonDecode(response_.body);
       List<Visita> lista_visite = [];
       for (var element in lista_json) {
         try {
@@ -31,11 +37,13 @@ class VisiteService {
         }
       }
       developer.log("Visite restituite dal backend");
+      lista_visite.sort((v1, v2) => v2.data.compareTo(v1.data));
+      developer.log("Visite ordinate per data decrescente");
       return lista_visite;
-    } else {
-      developer.log("Errore durante la getVisite.\n${response.statusCode}");
+    }, onError: (error) {
+      developer.log("Errore durante la getVisite.\n${error}");
       return Future.value([]);
-    }
+    });
   }
 
   static Future<bool> deleteVisita(Visita visita) async {

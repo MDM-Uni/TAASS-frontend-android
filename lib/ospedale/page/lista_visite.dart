@@ -67,6 +67,8 @@ class _ListaVisiteState extends State<ListaVisite> {
               setState(() {
                 visite = visite.then((visite_) {
                   visite_.add(visitaAggiunta_);
+                  //rimetto in ordine le visite
+                  visite_.sort((v1,v2) => v2.data.compareTo(v1.data));
                   return visite_;
                 }).then((visite_) {
                   //log(visite_.toString());

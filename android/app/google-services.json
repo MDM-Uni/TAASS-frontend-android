@@ -14,6 +14,30 @@
       },
       "oauth_client": [
         {
+          "client_id": "544771957287-242mbp20vq21btafkof0kaa93k1ba8s6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.taass_frontend_android",
+            "certificate_hash": "cbbd40ecdc5f27be11bc0199b1b58932e640745e"
+          }
+        },
+        {
+          "client_id": "544771957287-l89sqkogn1mr9iflrv1knp1t5stbn743.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.taass_frontend_android",
+            "certificate_hash": "1e18f760f6b65374756be7a2b09d8735c0992f9d"
+          }
+        },
+        {
+          "client_id": "544771957287-lauihpskbu4d3g66i0bckle2riofvt05.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.taass_frontend_android",
+            "certificate_hash": "1ff05c9f67da593bb7cb7a835bf8d6795d468bcf"
+          }
+        },
+        {
           "client_id": "544771957287-ptg72gfe8kv4lql82u8lorg53qt0j5eb.apps.googleusercontent.com",
           "client_type": 3
         }

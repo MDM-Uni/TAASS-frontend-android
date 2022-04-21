@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:taass_frontend_android/generale/bottom_nav_bar.dart';
 import 'package:taass_frontend_android/model/animale.dart';
 import 'package:intl/intl.dart';
@@ -98,9 +99,10 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
                     controller: data,
                     decoration: InputDecoration(
                         icon: Icon(Icons.calendar_today),
-                      labelText: "Data"
+                        labelText: "Data"
                     ),
                     readOnly: false,
+                    keyboardType: TextInputType.none,
                     onTap: () async {
                       DateTime? date = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2000), lastDate: DateTime(2101));
                       if(date!=null){
@@ -120,7 +122,19 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
                   },
                 ),
                 CasellaTesto(razza, "Razza"),
-                CasellaTesto(peso, "Peso"),
+                Padding(
+                    padding: EdgeInsets.all(16),
+                    child: TextFormField(
+                      controller: peso,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      decoration: InputDecoration(
+                        hintText: "Peso",
+                      ),
+                    ),
+                ),
                 CheckboxListTile(
                   title: Text("Pelo lungo"),
                   checkColor: Colors.greenAccent,
@@ -159,7 +173,7 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          if(index !=0)
+                          if(index !=0 && _patologie.length>1)
                             IconButton(onPressed: (){
                               if(_patologie.length>1){
                                 setState(() {

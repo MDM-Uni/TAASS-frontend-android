@@ -1,4 +1,4 @@
-import 'animale.dart';
+import '../ospedale/model/animale.dart';
 
 class Visita {
   int? id;

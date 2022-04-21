@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:taass_frontend_android/model/animale.dart';
 import 'package:taass_frontend_android/model/utente.dart';
-import 'package:taass_frontend_android/pagine/dettagli_animale.dart';
-import 'package:taass_frontend_android/service/http_service.dart';
+import 'package:taass_frontend_android/utente/pagine/dettagli_animale.dart';
+import 'package:taass_frontend_android/utente/service/utente_service.dart';
 
 class Dashboard extends StatefulWidget {
   late Utente user;
@@ -17,7 +17,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
 
-  HttpService httpService = HttpService();
+  UtenteService httpService = UtenteService();
 
   @override
   void initState() {

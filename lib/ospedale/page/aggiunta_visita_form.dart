@@ -6,7 +6,7 @@ import 'dart:developer';
 import 'package:intl/intl.dart';
 import 'package:taass_frontend_android/ospedale/model/animale.dart';
 import 'package:taass_frontend_android/ospedale/model/utente.dart';
-import 'package:taass_frontend_android/ospedale/model/visita.dart';
+import 'package:taass_frontend_android/model/visita.dart';
 import 'package:taass_frontend_android/ospedale/service/visite_service.dart';
 
 class AggiuntaVisitaForm extends StatefulWidget {

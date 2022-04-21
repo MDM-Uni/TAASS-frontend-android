@@ -5,7 +5,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 import 'package:taass_frontend_android/ospedale/model/animale.dart';
 import 'package:taass_frontend_android/ospedale/model/utente.dart';
-import 'package:taass_frontend_android/ospedale/model/visita.dart';
+import 'package:taass_frontend_android/model/visita.dart';
 import 'package:taass_frontend_android/ospedale/service/visite_service.dart';
 
 import 'aggiunta_visita_form.dart';

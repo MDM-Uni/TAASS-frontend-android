@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:taass_frontend_android/model/utente.dart';
 import 'dart:convert';
 
-import '../service/http_service.dart';
+import '../service/utente_service.dart';
 import 'dashboard.dart';
 
 class DettagliAnimale extends StatefulWidget {
@@ -29,7 +29,7 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
   late bool peloPungo = this.widget.animale.peloLungo;
   late List<TextEditingController> _patologie = [TextEditingController()];
   late List<String> patologia = [];
-  HttpService httpService = HttpService();
+  UtenteService httpService = UtenteService();
 
 
   @override

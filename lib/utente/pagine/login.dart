@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:taass_frontend_android/pagine/dashboard.dart';
+import 'package:taass_frontend_android/utente/pagine/dashboard.dart';
 
-import '../model/utente.dart';
-import '../service/http_service.dart';
+import '../../model/utente.dart';
+import '../service/utente_service.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -20,7 +20,7 @@ class LoginScreenState extends State<Login>{
   Map? _userData;
   String? nome;
   String? email;
-  HttpService httpService = HttpService();
+  UtenteService httpService = UtenteService();
   GoogleSignIn googleSignIn = GoogleSignIn(clientId: "544771957287-ptg72gfe8kv4lql82u8lorg53qt0j5eb.apps.googleusercontent.com");
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();

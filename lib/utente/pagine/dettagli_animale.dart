@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:taass_frontend_android/model/animale.dart';
 import 'package:intl/intl.dart';
 import 'package:taass_frontend_android/model/utente.dart';
-import 'dart:convert';
 
 import '../service/utente_service.dart';
 import 'dashboard.dart';
@@ -26,7 +25,7 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
   final TextEditingController patologie = TextEditingController();
   final TextEditingController peso = TextEditingController();
   final TextEditingController razza = TextEditingController();
-  late bool peloPungo = this.widget.animale.peloLungo;
+  late bool? peloPungo = this.widget.animale.peloLungo;
   late List<TextEditingController> _patologie = [TextEditingController()];
   late List<String> patologia = [];
   UtenteService httpService = UtenteService();
@@ -38,15 +37,15 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
     if(!widget.nuovo){
       nome.text = widget.animale.nome;
       data.text = widget.animale.dataDiNascita.toString().substring(0,10);
-      if(widget.animale.patologie.isNotEmpty) {
+      if(widget.animale.patologie != null && widget.animale.patologie!.isNotEmpty) {
         _patologie.clear();
-        for (var patologia in widget.animale.patologie){
+        for (var patologia in widget.animale.patologie!){
           final controller = TextEditingController();
           controller.text = patologia;
           _patologie.add(controller);
         }
       }
-      razza.text = widget.animale.razza;
+      razza.text = widget.animale.razza ?? '';
       peso.text = widget.animale.peso.toString();
     }
     super.initState();
@@ -66,7 +65,7 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
             for(var pat in _patologie){
               patologia.add(pat.text);
             }
-            _animale = Animale(0, nome.text, DateTime.parse(data.text), patologia, razza.text, num.parse(peso.text), peloPungo);
+            _animale = Animale(id: 0, nome: nome.text, dataDiNascita: DateTime.parse(data.text), patologie: patologia, razza: razza.text, peso: num.parse(peso.text), peloLungo: peloPungo);
             widget.utente = await httpService.addAnimal(widget.utente, _animale);
             Navigator.push(context, new MaterialPageRoute(builder: (__) => new Dashboard(widget.utente)));
           } else {
@@ -76,7 +75,7 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
               }
               patologia.add(pat.text);
             }
-            _animale = Animale(widget.animale.id, nome.text, DateTime.parse(data.text), patologia, razza.text, num.parse(peso.text), peloPungo);
+            _animale = Animale(id: widget.animale.id, nome: nome.text, dataDiNascita: DateTime.parse(data.text), patologie: patologia, razza:razza.text, peso :num.parse(peso.text), peloLungo: peloPungo);
             _animale = await httpService.updateAnimal(widget.utente,widget.animale,_animale);
             widget.utente.animali.remove(widget.animale);
             widget.utente.animali.add(_animale);

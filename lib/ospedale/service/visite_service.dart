@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer' as developer;
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-import 'package:taass_frontend_android/ospedale/model/animale.dart';
+import 'package:taass_frontend_android/model/animale.dart';
 import 'package:taass_frontend_android/model/visita.dart';
 import 'package:http/http.dart' as http;
 

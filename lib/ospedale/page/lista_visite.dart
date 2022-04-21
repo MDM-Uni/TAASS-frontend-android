@@ -3,8 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
-import 'package:taass_frontend_android/ospedale/model/animale.dart';
-import 'package:taass_frontend_android/ospedale/model/utente.dart';
+import 'package:taass_frontend_android/model/animale.dart';
+import 'package:taass_frontend_android/model/utente.dart';
+import 'package:taass_frontend_android/model/utente.dart';
 import 'package:taass_frontend_android/model/visita.dart';
 import 'package:taass_frontend_android/ospedale/service/visite_service.dart';
 

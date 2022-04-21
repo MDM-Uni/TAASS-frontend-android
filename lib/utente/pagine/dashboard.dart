@@ -32,7 +32,7 @@ class _DashboardState extends State<Dashboard> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Animale animale = new Animale(0, '', DateTime.now() , [], '', 0, false);
+          Animale animale = Animale(id: 0, nome: '', dataDiNascita: DateTime.now() , patologie: [], razza: '', peso: 0, peloLungo: false);
           Navigator.push(context, new MaterialPageRoute(builder: (__) => new DettagliAnimale(widget.user,animale,true)));
         },
       ),

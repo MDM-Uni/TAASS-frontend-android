@@ -3,8 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
-import 'package:taass_frontend_android/model/animale.dart';
-import 'package:taass_frontend_android/model/utente.dart';
+import 'package:taass_frontend_android/generale/bottom_nav_bar.dart';
 import 'package:taass_frontend_android/model/utente.dart';
 import 'package:taass_frontend_android/model/visita.dart';
 import 'package:taass_frontend_android/ospedale/service/visite_service.dart';
@@ -12,31 +11,32 @@ import 'package:taass_frontend_android/ospedale/service/visite_service.dart';
 import 'aggiunta_visita_form.dart';
 
 class ListaVisite extends StatefulWidget {
-  ListaVisite({Key? key}) : super(key: key);
-  final Utente utente = Utente(
-      1,
-      'marcoscale98@gmail.com',
-      'Marco Scale',
-      List.of([
-        Animale(id: 2, nome: 'Leo'),
-        Animale(id: 3, nome: 'Pippo'),
-        Animale(id: 5, nome: 'oiohui'),
-      ]));
+  ListaVisite(this.utente, {Key? key}) : super(key: key);
+
+  // final Utente utente = Utente(
+  //     1,
+  //     'marcoscale98@gmail.com',
+  //     'Marco Scale',
+  //     List.of([
+  //       Animale(id: 2, nome: 'Leo'),
+  //       Animale(id: 3, nome: 'Pippo'),
+  //       Animale(id: 5, nome: 'oiohui'),
+  //     ]));
+  Utente utente;
 
   @override
-  State<StatefulWidget> createState() => _ListaVisiteState(utente);
+  State<StatefulWidget> createState() => _ListaVisiteState();
 }
 
 class _ListaVisiteState extends State<ListaVisite> {
   late Future<List<Visita>> visite;
-  Utente utente;
 
-  _ListaVisiteState(this.utente);
+  _ListaVisiteState();
 
   @override
   void initState() {
     super.initState();
-    visite = VisiteService.getVisite(utente.animali, null, null);
+    visite = VisiteService.getVisite(widget.utente.animali, null, null);
   }
 
   @override
@@ -45,6 +45,7 @@ class _ListaVisiteState extends State<ListaVisite> {
       appBar: AppBar(
         title: Text('Lista visite'),
       ),
+      bottomNavigationBar: MyBottomNavBar(utente: widget.utente),
       body: FutureBuilder<List<Visita>>(
         future: visite,
         builder: (context, snapshot) {
@@ -61,21 +62,29 @@ class _ListaVisiteState extends State<ListaVisite> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          Future <Visita?> visitaAggiunta = Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AggiuntaVisitaForm()));
+          Future<Visita?> visitaAggiunta = Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AggiuntaVisitaForm(widget.utente)));
           visitaAggiunta.then((visitaAggiunta_) {
-            if(visitaAggiunta_ != null) {
+            if (visitaAggiunta_ != null) {
               setState(() {
                 visite = visite.then((visite_) {
                   visite_.add(visitaAggiunta_);
                   //rimetto in ordine le visite
-                  visite_.sort((v1,v2) => v2.data.compareTo(v1.data));
+                  visite_.sort((v1, v2) => v2.data.compareTo(v1.data));
                   return visite_;
                 }).then((visite_) {
                   //log(visite_.toString());
                   return visite_;
                 });
               });
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                    content: Text(
+                        'Non puoi aggiungere una nuova visita se non aggiungi prima un tuo animale')),
+              );
             }
           });
         },
@@ -93,7 +102,8 @@ class _ListaVisiteState extends State<ListaVisite> {
             visitaField('🗓', 'Data',
                 DateFormat('dd/MM/yyyy HH:mm').format(visita.data)),
             visitaField(' ', 'Durata', visita.durataInMinuti.toString()),
-            visitaField(' ', 'Tipo Visita', Visita.tipoVisitaToString(visita.tipoVisita)),
+            visitaField(' ', 'Tipo Visita',
+                Visita.tipoVisitaToString(visita.tipoVisita)),
             if (visita.note != null) visitaField('📒', 'Note', visita.note!),
             const Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 7))
           ],
@@ -130,6 +140,4 @@ class _ListaVisiteState extends State<ListaVisite> {
             }
         });
   }
-
-
 }

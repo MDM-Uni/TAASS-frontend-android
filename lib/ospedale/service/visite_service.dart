@@ -33,7 +33,7 @@ class VisiteService {
         try {
           lista_visite.add(Visita.fromJson(element, animaliDiUtente));
         } on StateError catch (e) {
-          developer.log("Errore nella conversione di $element in Animale");
+          developer.log("Errore nella conversione di $element in Visita");
         }
       }
       developer.log("Visite restituite dal backend");

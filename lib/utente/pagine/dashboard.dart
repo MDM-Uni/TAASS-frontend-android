@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:taass_frontend_android/generale/bottom_nav_bar.dart';
 import 'package:taass_frontend_android/model/animale.dart';
 import 'package:taass_frontend_android/model/utente.dart';
 import 'package:taass_frontend_android/utente/pagine/dettagli_animale.dart';
@@ -29,6 +30,7 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      bottomNavigationBar: MyBottomNavBar(utente: widget.user),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {

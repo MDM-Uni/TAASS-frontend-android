@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:taass_frontend_android/generale/bottom_nav_bar.dart';
 import 'package:taass_frontend_android/model/animale.dart';
 import 'package:intl/intl.dart';
 import 'package:taass_frontend_android/model/utente.dart';
@@ -57,6 +58,7 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
       appBar: AppBar(
         title: Text("Dettagli Animale"),
       ),
+      bottomNavigationBar: MyBottomNavBar(utente: widget.utente),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.save),
         onPressed: () async {

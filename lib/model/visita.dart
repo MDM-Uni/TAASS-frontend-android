@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'animale.dart';
 
 class Visita {
@@ -29,7 +31,11 @@ class Visita {
 
   Visita.fromJson(Map<String, dynamic> json, List<Animale> animali)
       : id = json['id'],
-        animale = animali.firstWhere((animale) => animale.id == json['idAnimale']),
+        animale = animali.firstWhere(
+                (animale) => animale.id == json['idAnimale'],
+                orElse: () {
+                  throw "Animale non trovato durante la conversione JSON della visita $json";
+                }),
         data = DateTime.parse(json['data']),
         durataInMinuti = json['durataInMinuti'],
         note = json['note'],

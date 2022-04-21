@@ -4,43 +4,53 @@ import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'dart:developer';
 
 import 'package:intl/intl.dart';
+import 'package:taass_frontend_android/generale/bottom_nav_bar.dart';
 import 'package:taass_frontend_android/model/animale.dart';
 import 'package:taass_frontend_android/model/utente.dart';
 import 'package:taass_frontend_android/model/visita.dart';
 import 'package:taass_frontend_android/ospedale/service/visite_service.dart';
 
 class AggiuntaVisitaForm extends StatefulWidget {
-  AggiuntaVisitaForm({Key? key}) : super(key: key);
-  final Utente utente = Utente(
-      1,
-      'marcoscale98@gmail.com',
-      'Marco Scale',
-      List.of([
-        Animale(id: 2, nome: 'Leo'),
-        Animale(id: 3, nome: 'Pippo'),
-        Animale(id: 5, nome: 'oiohui'),
-      ]));
+  Utente utente;
+
+  AggiuntaVisitaForm(this.utente, {Key? key}) : super(key: key);
+
+  // final Utente utente = Utente(
+  //     1,
+  //     'marcoscale98@gmail.com',
+  //     'Marco Scale',
+  //     List.of([
+  //       Animale(id: 2, nome: 'Leo'),
+  //       Animale(id: 3, nome: 'Pippo'),
+  //       Animale(id: 5, nome: 'oiohui'),
+  //     ]));
 
   @override
   State<AggiuntaVisitaForm> createState() {
-    return _AggiuntaVisitaFormState(utente);
+    return _AggiuntaVisitaFormState();
   }
 }
 
 class _AggiuntaVisitaFormState extends State<AggiuntaVisitaForm> {
   final _formKey = GlobalKey<FormState>();
   late Visita visita;
-  Utente utente;
   var dataController = TextEditingController();
 
-  _AggiuntaVisitaFormState(this.utente) {
-    visita = Visita(
-      animale: utente.animali[0],
-      data: DateTime.now().add(const Duration(days: 1)),
-      tipoVisita: TipoVisita.VACCINO,
-      durataInMinuti: 30,
-    );
-    dataController.text = DateFormat('dd/MM/yyyy HH:mm').format(visita.data);
+  _AggiuntaVisitaFormState();
+
+  @override
+  void initState() {
+    if (widget.utente.animali.isNotEmpty) {
+      visita = Visita(
+        animale: widget.utente.animali[0],
+        data: DateTime.now().add(const Duration(days: 1)),
+        tipoVisita: TipoVisita.VACCINO,
+        durataInMinuti: 30,
+      );
+      dataController.text = DateFormat('dd/MM/yyyy HH:mm').format(visita.data);
+    } else {
+      Navigator.of(context).pop(null); //errore: l'utente ha 0 animali
+    }
   }
 
   @override
@@ -49,10 +59,11 @@ class _AggiuntaVisitaFormState extends State<AggiuntaVisitaForm> {
       appBar: AppBar(
         title: Text('Aggiunta visite'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(null),
         ),
       ),
+      bottomNavigationBar: MyBottomNavBar(utente: widget.utente),
       body: Form(
           key: _formKey,
           child: Column(
@@ -83,7 +94,7 @@ class _AggiuntaVisitaFormState extends State<AggiuntaVisitaForm> {
                   decoration: const InputDecoration.collapsed(hintText: 'Note'),
                   initialValue: '',
                   onChanged: (newValue) {
-                    if (newValue != null && newValue != '') {
+                    if (newValue != '') {
                       setState(() {
                         visita.note = newValue;
                       });
@@ -168,7 +179,7 @@ class _AggiuntaVisitaFormState extends State<AggiuntaVisitaForm> {
       hint: const Text("Animale"),
       value: visita.animale,
       items: [
-        for (var animale in utente.animali)
+        for (var animale in widget.utente.animali)
           DropdownMenuItem<Animale>(
             child: Text(animale.nome),
             value: animale,

@@ -70,7 +70,8 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
             }
             _animale = Animale(id: 0, nome: nome.text, dataDiNascita: DateTime.parse(data.text), patologie: patologia, razza: razza.text, peso: num.parse(peso.text), peloLungo: peloPungo);
             widget.utente = await httpService.addAnimal(widget.utente, _animale);
-            Navigator.push(context, new MaterialPageRoute(builder: (__) => new Dashboard(widget.utente)));
+            //Navigator.push(context, new MaterialPageRoute(builder: (__) => new Dashboard(widget.utente)));
+            Navigator.pop(context,widget.utente);
           } else {
             for(var pat in _patologie){
               if(pat.text != ""){
@@ -82,7 +83,8 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
             _animale = await httpService.updateAnimal(widget.utente,widget.animale,_animale);
             widget.utente.animali.remove(widget.animale);
             widget.utente.animali.add(_animale);
-            Navigator.push(context, new MaterialPageRoute(builder: (__) => new Dashboard(widget.utente)));
+            //Navigator.push(context, new MaterialPageRoute(builder: (__) => new Dashboard(widget.utente)));
+            Navigator.pop(context,widget.utente);
           }
         },
       ),

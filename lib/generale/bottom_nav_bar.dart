@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taass_frontend_android/model/utente.dart';
+import 'package:taass_frontend_android/negozio/page/negozio.dart';
 import 'package:taass_frontend_android/ospedale/page/lista_visite.dart';
 import 'package:taass_frontend_android/utente/pagine/dashboard.dart';
 
@@ -14,10 +15,12 @@ class MyBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      items: [
-        BottomNavigationBarItem(icon: Icon(Icons.account_circle_outlined), label: "Dashboard"),
+      items: const [
+        BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle_outlined), label: "Dashboard"),
         BottomNavigationBarItem(icon: Icon(Icons.apartment), label: "Ospedale"),
-        BottomNavigationBarItem(icon: Icon(Icons.shopping_cart_rounded), label: "Negozio"),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart_rounded), label: "Negozio"),
       ],
       onTap: (index) {
         Navigator.of(context).pop();
@@ -30,6 +33,10 @@ class MyBottomNavBar extends StatelessWidget {
           case 1:
             Navigator.push(context,
                 MaterialPageRoute(builder: (__) => ListaVisite(utente)));
+            return;
+          case 2:
+            Navigator.push(
+                context, MaterialPageRoute(builder: (__) => Negozio(utente)));
             return;
           default:
             throw "Non hai implementato il case per questo BottomNavigationBarItem";

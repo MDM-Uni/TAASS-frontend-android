@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:taass_frontend_android/generale/bottom_nav_bar.dart';
+import 'package:taass_frontend_android/model/carrello.dart';
 import 'package:taass_frontend_android/model/prodotto.dart';
 import 'package:taass_frontend_android/model/utente.dart';
+import 'package:taass_frontend_android/negozio/page/carrello.dart';
+import 'package:taass_frontend_android/negozio/page/quantita_picker.dart';
+import 'package:taass_frontend_android/negozio/service/carrelli_service.dart';
 import 'package:taass_frontend_android/negozio/service/prodotti_service.dart';
 
 class DettagliProdotto extends StatefulWidget {
@@ -19,10 +23,12 @@ class _DettagliProdottoState extends State<DettagliProdotto> {
   _DettagliProdottoState();
 
   int quantita = 1;
+  late Future<Carrello> carrello;
 
   @override
   void initState() {
     super.initState();
+    carrello = CarrelliService.getCarrello(widget.utente.id);
   }
 
   @override
@@ -30,72 +36,81 @@ class _DettagliProdottoState extends State<DettagliProdotto> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Acquista'),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(
+                Icons.shopping_bag,
+                color: Colors.white,
+              ),
+              onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Ordini'), duration: Duration(seconds: 2))),
+            ),
+            IconButton(
+              icon: const Icon(
+                Icons.shopping_cart,
+                color: Colors.white,
+              ),
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (__) => CarrelloWidget(widget.utente))),
+            )
+          ],
         ),
         bottomNavigationBar: MyBottomNavBar(utente: widget.utente),
         body: dettagliProdottoBody());
   }
 
   Widget dettagliProdottoBody() {
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Image.network(
-                    ProdottiService.getUrlImmagineProdotto(widget.prodotto.id),
-                    height: 300,
-                    width: 300,
-                  )),
-            ],
-          ),
-          dettagliProdottoInfo(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                  child: Text('Quantità:'),
-                ),
-                Card(
-                  child: IconButton(
-                      iconSize: 30,
-                      onPressed: quantita > 1
-                          ? () => setState(() => quantita--)
-                          : null,
-                      icon: const Icon(Icons.remove)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    quantita.toString(),
-                    style: const TextStyle(fontSize: 20),
+    return FutureBuilder(
+        future: carrello,
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.hasData) {
+            return SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Image.network(
+                            ProdottiService.getUrlImmagineProdotto(
+                                widget.prodotto.id),
+                            height: 300,
+                            width: 300,
+                          )),
+                    ],
                   ),
-                ),
-                Card(
-                  child: IconButton(
-                      iconSize: 30,
-                      onPressed: () => setState(() => quantita++),
-                      icon: const Icon(Icons.add)),
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(40)),
-              onPressed: () {},
-              child: const Text('Acquista'),
-            ),
-          )
-        ],
-      ),
-    );
+                  dettagliProdottoInfo(),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15),
+                    child: QuantitaPicker(
+                        quantita: 1,
+                        onDecrement: () => setState(() => quantita--),
+                        onIncrement: () => setState(() => quantita++)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 15),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: const Size.fromHeight(40)),
+                      onPressed: aggiungiAlCarrello(
+                          snapshot.data, widget.prodotto, quantita),
+                      child: const Text('Aggiungi al carrello'),
+                    ),
+                  )
+                ],
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Text(snapshot.error.toString());
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        });
   }
 
   Widget dettagliProdottoInfo() {
@@ -125,5 +140,21 @@ class _DettagliProdottoState extends State<DettagliProdotto> {
         ],
       ),
     );
+  }
+
+  void Function() aggiungiAlCarrello(
+      Carrello carrello, Prodotto prodotto, int quantita) {
+    return () {
+      CarrelliService.aggiungiProdotto(carrello.id!, prodotto.id!, quantita)
+          .then((_) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Prodotto aggiunto al carrello")));
+      }).catchError((_) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+                "C'è stato un problema: il prodotto non è stato aggiunto al carrello")));
+      });
+    };
   }
 }

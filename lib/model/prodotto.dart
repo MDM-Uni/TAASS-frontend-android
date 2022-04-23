@@ -39,3 +39,29 @@ class Prodotto {
       id.hashCode ^ nome.hashCode ^ prezzo.hashCode ^ categoria.hashCode;
 //</editor-fold>
 }
+
+class ProdottoQuantita {
+  Prodotto prodotto;
+  int quantita;
+
+  ProdottoQuantita({required this.prodotto, required this.quantita});
+
+  factory ProdottoQuantita.fromJson(Map<String, dynamic> json) {
+    return ProdottoQuantita(
+        prodotto: Prodotto.fromJson(json['prodotto']),
+        quantita: json['quantita']);
+  }
+
+  //<editor-fold defaultstate="collapsed" desc="== and hashCode">
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ProdottoQuantita &&
+          runtimeType == other.runtimeType &&
+          prodotto == other.prodotto &&
+          quantita == other.quantita;
+
+  @override
+  int get hashCode => prodotto.hashCode ^ quantita.hashCode;
+//</editor-fold>
+}

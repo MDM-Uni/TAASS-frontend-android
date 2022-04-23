@@ -5,6 +5,8 @@ import 'package:taass_frontend_android/model/utente.dart';
 import 'package:taass_frontend_android/negozio/page/dettagli_prodotto.dart';
 import 'package:taass_frontend_android/negozio/service/prodotti_service.dart';
 
+import 'carrello.dart';
+
 class Negozio extends StatefulWidget {
   Negozio(this.utente, {Key? key}) : super(key: key);
 
@@ -29,7 +31,29 @@ class _NegozioState extends State<Negozio> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('Negozio'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(
+              Icons.shopping_bag,
+              color: Colors.white,
+            ),
+            onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                    content: Text('Ordini'), duration: Duration(seconds: 2))),
+          ),
+          IconButton(
+            icon: const Icon(
+              Icons.shopping_cart,
+              color: Colors.white,
+            ),
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (__) => CarrelloWidget(widget.utente))),
+          )
+        ],
       ),
       bottomNavigationBar: MyBottomNavBar(utente: widget.utente),
       body: FutureBuilder<List<Prodotto>>(

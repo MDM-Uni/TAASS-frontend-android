@@ -5,7 +5,6 @@ import 'package:taass_frontend_android/generale/bottom_nav_bar.dart';
 import 'package:taass_frontend_android/model/animale.dart';
 import 'package:intl/intl.dart';
 import 'package:taass_frontend_android/model/utente.dart';
-
 import '../service/utente_service.dart';
 import 'dashboard.dart';
 
@@ -71,6 +70,9 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
             _animale = Animale(id: 0, nome: nome.text, dataDiNascita: DateTime.parse(data.text), patologie: patologia, razza: razza.text, peso: num.parse(peso.text), peloLungo: peloPungo);
             widget.utente = await httpService.addAnimal(widget.utente, _animale);
             //Navigator.push(context, new MaterialPageRoute(builder: (__) => new Dashboard(widget.utente)));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Animale aggiunto con successo"),
+            ));
             Navigator.pop(context,widget.utente);
           } else {
             for(var pat in _patologie){
@@ -84,6 +86,9 @@ class _DettagliAnimaleState extends State<DettagliAnimale> {
             widget.utente.animali.remove(widget.animale);
             widget.utente.animali.add(_animale);
             //Navigator.push(context, new MaterialPageRoute(builder: (__) => new Dashboard(widget.utente)));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Animale aggiornato con successo"),
+            ));
             Navigator.pop(context,widget.utente);
           }
         },

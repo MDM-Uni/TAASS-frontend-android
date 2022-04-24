@@ -18,7 +18,6 @@ class CarrelloWidget extends StatefulWidget {
 
 class _CarrelloWidgetState extends State<CarrelloWidget> {
   late Future<Carrello> carrello;
-  late ListView listView;
 
   _CarrelloWidgetState();
 
@@ -51,11 +50,52 @@ class _CarrelloWidgetState extends State<CarrelloWidget> {
   }
 
   Widget carrelloWidget(Carrello carrello) {
-    listView = ListView(
-        padding: const EdgeInsets.all(8),
-        children:
-            carrello.prodotti.map((pq) => prodottoCard(carrello, pq)).toList());
-    return listView;
+    List<Widget> listItems = [
+      Padding(
+        padding: const EdgeInsets.fromLTRB(5, 15, 5, 0),
+        child: Row(
+          children: [
+            const Text('Totale',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Text('€ ${carrello.totale.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                      fontSize: 25, color: Color.fromARGB(255, 64, 64, 64))),
+            ),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(right: 5),
+              child: Text(
+                  '${carrello.numeroArticoli} articol${carrello.numeroArticoli > 1 ? "i" : "o"}',
+                  style: const TextStyle(fontSize: 17)),
+            ),
+          ],
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
+        child: ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(45)),
+            child: const Text('Procedi all\'ordine')),
+      )
+    ];
+    listItems.addAll(
+        carrello.prodotti.map((pq) => prodottoCard(carrello, pq)).toList());
+    return carrello.numeroArticoli > 0
+        ? ListView(
+            key: UniqueKey(),
+            padding: const EdgeInsets.all(8),
+            children: listItems)
+        : Center(
+            key: UniqueKey(),
+            child: const Text(
+              'Il tuo carrello è vuoto',
+              style: TextStyle(fontSize: 17),
+            ),
+          );
   }
 
   Widget prodottoCard(Carrello carrello, ProdottoQuantita prodottoQuantita) {
@@ -109,6 +149,8 @@ class _CarrelloWidgetState extends State<CarrelloWidget> {
           .then((_) {
         setState(() {
           prodottoQuantita.quantita--;
+          carrello.numeroArticoli--;
+          carrello.totale -= prodottoQuantita.prodotto.prezzo;
           if (prodottoQuantita.quantita == 0) {
             carrello.prodotti.remove(prodottoQuantita);
           }
@@ -129,6 +171,8 @@ class _CarrelloWidgetState extends State<CarrelloWidget> {
           .then((_) {
         setState(() {
           prodottoQuantita.quantita++;
+          carrello.numeroArticoli++;
+          carrello.totale += prodottoQuantita.prodotto.prezzo;
         });
       }).catchError((_) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

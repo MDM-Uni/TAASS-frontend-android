@@ -3,6 +3,7 @@ import 'package:taass_frontend_android/generale/bottom_nav_bar.dart';
 import 'package:taass_frontend_android/model/carrello.dart';
 import 'package:taass_frontend_android/model/prodotto.dart';
 import 'package:taass_frontend_android/model/utente.dart';
+import 'package:taass_frontend_android/negozio/page/ordine_seleziona_animale.dart';
 import 'package:taass_frontend_android/negozio/page/quantita_picker.dart';
 import 'package:taass_frontend_android/negozio/service/carrelli_service.dart';
 import 'package:taass_frontend_android/negozio/service/prodotti_service.dart';
@@ -76,7 +77,11 @@ class _CarrelloWidgetState extends State<CarrelloWidget> {
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
         child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => OrdineSelezionaAnimale(
+                        utente: widget.utente, carrello: carrello))),
             style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(45)),
             child: const Text('Procedi all\'ordine')),

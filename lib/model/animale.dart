@@ -20,6 +20,7 @@ class Animale {
 
   Map<String, dynamic> toJson(){
     return {
+      'id': id.toString(),
       'nome': nome,
       'dataDiNascita': dataDiNascita!.toIso8601String(),
       'patologie' : patologie,

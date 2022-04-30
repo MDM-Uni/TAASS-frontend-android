@@ -6,6 +6,9 @@ import 'package:taass_frontend_android/model/carrello.dart';
 import 'package:taass_frontend_android/model/indirizzo.dart';
 import 'package:taass_frontend_android/model/utente.dart';
 import 'package:taass_frontend_android/negozio/page/ordine_conferma.dart';
+import 'package:taass_frontend_android/negozio/service/ordini_service.dart';
+
+import 'carrello.dart';
 
 class OrdinePagamento extends StatelessWidget {
   OrdinePagamento(
@@ -39,10 +42,22 @@ class OrdinePagamento extends StatelessWidget {
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(40)),
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => OrdineConferma(utente: utente))),
+                  onPressed: () {
+                    OrdiniService.creaOrdine(
+                            carrello.id!, indirizzo.id!, animale.id)
+                        .then((_) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (c) => OrdineConferma(utente: utente)));
+                    }).catchError((error) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                              '$error\nC\'è stato un problema. L\'ordine non è stato effettuato')));
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (c) => CarrelloWidget(utente)),
+                          (route) => false);
+                    });
+                  },
                   child: const Text('Paga')),
             )
           ],

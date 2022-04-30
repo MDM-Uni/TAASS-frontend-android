@@ -30,7 +30,7 @@ class OrdineConferma extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(40)),
                   onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (c) => Negozio(utente)),
+                      MaterialPageRoute(builder: (_) => Negozio(utente)),
                       (route) => false),
                   child: const Text('Torna al negozio')),
             )

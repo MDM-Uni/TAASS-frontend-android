@@ -11,7 +11,7 @@ class VisiteService {
   static const String basicUrl = '10.0.2.2:8081';
 
   static Future<List<Visita>> getVisite(
-      List<Animale> animaliDiUtente, int? idAnimale, TipoVisita? tipoVisita) {
+      List<Animale> animaliDiUtente, int? idAnimale, TipoVisita? tipoVisita) async {
     final Map<String, String> parametri = {};
     if (idAnimale != null) {
       animaliDiUtente = animaliDiUtente
@@ -23,30 +23,38 @@ class VisiteService {
     }
     Uri url = Uri.http(
         VisiteService.basicUrl, '/ospedale/getVisiteAnimali', parametri);
-    final response = http.post(url, body: animaliDiUtente);
+    log("Animali dell'utente in json:");
+    log(jsonEncode(animaliDiUtente));
+    final response = await http.post(
+      url,
+      body: jsonEncode(animaliDiUtente),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
     return gestisciRispostaGetVisite(response, animaliDiUtente);
   }
 
-  static Future<List<Visita>> gestisciRispostaGetVisite(
-      Future<Response> response, List<Animale> animaliDiUtente) {
-    return response.then((response_) {
-      List lista_json = jsonDecode(response_.body);
-      List<Visita> lista_visite = [];
-      for (var element in lista_json) {
+  static List<Visita> gestisciRispostaGetVisite(
+      Response response, List<Animale> animaliDiUtente) {
+    if (response.statusCode == 200) {
+      List listaJson = jsonDecode(response.body);
+      List<Visita> listaVisite = [];
+      for (var element in listaJson) {
         try {
-          lista_visite.add(Visita.fromJson(element, animaliDiUtente));
+          listaVisite.add(Visita.fromJson(element, animaliDiUtente));
         } on StateError catch (e) {
           log("Errore nella conversione di $element in Visita");
         }
       }
       log("Visite restituite dal backend");
-      lista_visite.sort((v1, v2) => v2.data.compareTo(v1.data));
+      listaVisite.sort((v1, v2) => v2.data.compareTo(v1.data));
       log("Visite ordinate per data decrescente");
-      return lista_visite;
-    }, onError: (error) {
-      log("Errore durante la getVisite.\n${error}");
+      return listaVisite;
+    } else {
+      log("Errore durante la getVisite.\n${response.statusCode}");
       return List<Visita>.empty(growable: true);
-    });
+    }
   }
 
   static Future<bool> deleteVisita(Visita visita) async {

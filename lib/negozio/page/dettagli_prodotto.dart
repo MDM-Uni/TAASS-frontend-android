@@ -4,7 +4,6 @@ import 'package:taass_frontend_android/generale/bottom_nav_bar.dart';
 import 'package:taass_frontend_android/model/carrello.dart';
 import 'package:taass_frontend_android/model/prodotto.dart';
 import 'package:taass_frontend_android/model/utente.dart';
-import 'package:taass_frontend_android/negozio/page/carrello.dart';
 import 'package:taass_frontend_android/negozio/page/quantita_picker.dart';
 import 'package:taass_frontend_android/negozio/service/carrelli_service.dart';
 import 'package:taass_frontend_android/negozio/service/prodotti_service.dart';
@@ -36,27 +35,6 @@ class _DettagliProdottoState extends State<DettagliProdotto> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Acquista'),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(
-                Icons.shopping_bag,
-                color: Colors.white,
-              ),
-              onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text('Ordini'), duration: Duration(seconds: 2))),
-            ),
-            IconButton(
-              icon: const Icon(
-                Icons.shopping_cart,
-                color: Colors.white,
-              ),
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (__) => CarrelloWidget(widget.utente))),
-            )
-          ],
         ),
         bottomNavigationBar: MyBottomNavBar(utente: widget.utente),
         body: dettagliProdottoBody());

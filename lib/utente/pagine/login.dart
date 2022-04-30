@@ -30,23 +30,22 @@ class LoginScreenState extends State<Login>{
     // TODO: implement build
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: Text("Login")),
-      body: Container(
-        margin: EdgeInsets.all(95),
+      appBar: AppBar(title: const Text("Login")),
+      body: Center(
         child: Form(
           key: formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Container(
+              SizedBox(
                 height: 150,
                 width: 250,
                 child: Center(
                   child: Image.asset('assets/images/pet_life_logo_idea_2.png'),
                 ),
               ),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
               SignInButton(
                 Buttons.Google,
                 text: "Accedi con Google",

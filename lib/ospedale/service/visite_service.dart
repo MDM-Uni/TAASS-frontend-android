@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer' as developer;
+import 'dart:developer';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:taass_frontend_android/model/animale.dart';
@@ -13,14 +14,16 @@ class VisiteService {
       List<Animale> animaliDiUtente, int? idAnimale, TipoVisita? tipoVisita) {
     final Map<String, String> parametri = {};
     if (idAnimale != null) {
-      parametri["idAnimale"] = idAnimale.toString();
+      animaliDiUtente = animaliDiUtente
+          .where((animale_) => animale_.id == idAnimale)
+          .toList();
     }
     if (tipoVisita != null) {
       parametri['tipoVisita'] = Visita.tipoVisitaToString(tipoVisita);
     }
-    Uri url =
-        Uri.http(VisiteService.basicUrl, '/ospedale/getVisite', parametri);
-    final response = http.get(url);
+    Uri url = Uri.http(
+        VisiteService.basicUrl, '/ospedale/getVisiteAnimali', parametri);
+    final response = http.post(url, body: animaliDiUtente);
     return gestisciRispostaGetVisite(response, animaliDiUtente);
   }
 
@@ -33,16 +36,16 @@ class VisiteService {
         try {
           lista_visite.add(Visita.fromJson(element, animaliDiUtente));
         } on StateError catch (e) {
-          developer.log("Errore nella conversione di $element in Visita");
+          log("Errore nella conversione di $element in Visita");
         }
       }
-      developer.log("Visite restituite dal backend");
+      log("Visite restituite dal backend");
       lista_visite.sort((v1, v2) => v2.data.compareTo(v1.data));
-      developer.log("Visite ordinate per data decrescente");
+      log("Visite ordinate per data decrescente");
       return lista_visite;
     }, onError: (error) {
-      developer.log("Errore durante la getVisite.\n${error}");
-      return Future.value([]);
+      log("Errore durante la getVisite.\n${error}");
+      return List<Visita>.empty(growable: true);
     });
   }
 

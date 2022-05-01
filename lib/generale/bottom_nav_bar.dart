@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taass_frontend_android/model/utente.dart';
+import 'package:taass_frontend_android/negozio/page/negozio.dart';
 import 'package:taass_frontend_android/ospedale/page/lista_visite.dart';
 import 'package:taass_frontend_android/utente/pagine/dashboard.dart';
 
@@ -33,6 +34,10 @@ class MyBottomNavBar extends StatelessWidget {
           case 1:
             Navigator.push(context,
                 MaterialPageRoute(builder: (__) => ListaVisite(utente)));
+            return;
+          case 2:
+            Navigator.push(
+                context, MaterialPageRoute(builder: (__) => Negozio(utente)));
             return;
           case 3:
             Navigator.of(context).pop();

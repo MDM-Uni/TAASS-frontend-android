@@ -3,6 +3,7 @@ import 'package:taass_frontend_android/generale/bottom_nav_bar.dart';
 import 'package:taass_frontend_android/model/prodotto.dart';
 import 'package:taass_frontend_android/model/utente.dart';
 import 'package:taass_frontend_android/negozio/page/dettagli_prodotto.dart';
+import 'package:taass_frontend_android/negozio/page/lista_ordini.dart';
 import 'package:taass_frontend_android/negozio/service/prodotti_service.dart';
 
 import 'carrello.dart';
@@ -39,9 +40,10 @@ class _NegozioState extends State<Negozio> {
               Icons.shopping_bag,
               color: Colors.white,
             ),
-            onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                    content: Text('Ordini'), duration: Duration(seconds: 2))),
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => ListaOrdini(utente: widget.utente))),
           ),
           IconButton(
             icon: const Icon(

@@ -1,20 +1,18 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:taass_frontend_android/model/carrello.dart';
 import 'package:taass_frontend_android/model/ordine.dart';
 
 class OrdiniService {
   static const String baseUrl = 'http://10.0.2.2:8082/api/v1/ordini';
 
-  static Future<List<Ordine>> getOrdini(int id) {
+  static Future<List<AnimaleOrdine>> getOrdini(int id) {
     Uri url = Uri.parse('${OrdiniService.baseUrl}/$id');
-    return http
-        .get(url)
-        .then((resp) => jsonDecode(resp.body).map((o) => Ordine.fromJson(o)));
+    return http.get(url).then((resp) => List<AnimaleOrdine>.from(
+        jsonDecode(resp.body).map((o) => AnimaleOrdine.fromJson(o))));
   }
 
-  static Future<Carrello> getOrdiniAnimale(int idUtente, int idAnimale) {
+  static Future<List<Ordine>> getOrdiniAnimale(int idUtente, int idAnimale) {
     Uri url = Uri.parse('${OrdiniService.baseUrl}/$idUtente/$idAnimale');
     return http
         .get(url)

@@ -13,18 +13,19 @@ class VisiteService {
   static Future<List<Visita>> getVisite(
       List<Animale> animaliDiUtente, int? idAnimale, TipoVisita? tipoVisita) async {
     final Map<String, String> parametri = {};
-    if (idAnimale != null) {
+    if (idAnimale != null && idAnimale > 0) {
       animaliDiUtente = animaliDiUtente
           .where((animale_) => animale_.id == idAnimale)
           .toList();
     }
     if (tipoVisita != null) {
-      parametri['tipoVisita'] = Visita.tipoVisitaToString(tipoVisita);
+      parametri['tipoVisita'] = Visita.tipoVisitaToString(tipoVisita).toLowerCase();
     }
     Uri url = Uri.http(
         VisiteService.basicUrl, '/ospedale/getVisiteAnimali', parametri);
-    log("Animali dell'utente in json:");
-    log(jsonEncode(animaliDiUtente));
+    // log(url.toString());
+    // log("Animali dell'utente in json:");
+    // log(jsonEncode(animaliDiUtente));
     final response = await http.post(
       url,
       body: jsonEncode(animaliDiUtente),
@@ -47,9 +48,9 @@ class VisiteService {
           log("Errore nella conversione di $element in Visita");
         }
       }
-      log("Visite restituite dal backend");
+      // log("Visite restituite dal backend: " + listaJson.length.toString());
       listaVisite.sort((v1, v2) => v2.data.compareTo(v1.data));
-      log("Visite ordinate per data decrescente");
+      // log("Visite ordinate per data decrescente");
       return listaVisite;
     } else {
       log("Errore durante la getVisite.\n${response.statusCode}");
@@ -81,7 +82,7 @@ class VisiteService {
         },
         body: jsonEncode(visita.toJson()));
     if (response.statusCode == 200) {
-      developer.log("Aggiunta visita nel backend $visita");
+      // developer.log("Aggiunta visita nel backend $visita");
       int idVisita = jsonDecode(response.body);
       return idVisita; //restituisce l'id della visita
     } else {

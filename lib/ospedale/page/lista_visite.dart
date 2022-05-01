@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 import 'package:taass_frontend_android/generale/bottom_nav_bar.dart';
+import 'package:taass_frontend_android/model/animale.dart';
 import 'package:taass_frontend_android/model/utente.dart';
 import 'package:taass_frontend_android/model/visita.dart';
 import 'package:taass_frontend_android/ospedale/service/visite_service.dart';
@@ -30,6 +31,9 @@ class ListaVisite extends StatefulWidget {
 
 class _ListaVisiteState extends State<ListaVisite> {
   late Future<List<Visita>> visite;
+  Animale? animaleFiltrato;
+  TipoVisita? tipoVisitaFiltrato;
+  final _formKey = GlobalKey<FormState>();
 
   _ListaVisiteState();
 
@@ -46,18 +50,54 @@ class _ListaVisiteState extends State<ListaVisite> {
         title: Text('Lista visite'),
       ),
       bottomNavigationBar: MyBottomNavBar(utente: widget.utente),
-      body: FutureBuilder<List<Visita>>(
-        future: visite,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView(
-                padding: const EdgeInsets.all(8),
-                children: snapshot.data!.map(visiteCard).toList());
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-          return const Center(child: CircularProgressIndicator());
-        },
+      body: Column(
+        children: [
+        Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              //scelta animale
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: buildSceltaAnimaleInputWidget(),
+              ),
+              //scelta tipoVisita
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: buildSceltaTipoVisitaInputWidget(),
+              ),
+              //bottone prenotazione
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      visite = VisiteService.getVisite(widget.utente.animali,
+                          animaleFiltrato?.id, tipoVisitaFiltrato);
+                    });
+                  },
+                  child: const Text('Filtra'),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: FutureBuilder<List<Visita>>(
+            future: visite,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView(
+                    padding: const EdgeInsets.all(8),
+                    children: snapshot.data!.map(visiteCard).toList());
+              } else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
+              return const Center(child: CircularProgressIndicator());
+            },
+          ),
+        ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
@@ -96,7 +136,8 @@ class _ListaVisiteState extends State<ListaVisite> {
     return Card(
       child: ExpansionTile(
           title: Text(
-              ' ${Visita.tipoVisitaToString(visita.tipoVisita)} per ${visita.animale.nome}'),
+              ' ${Visita.tipoVisitaToString(visita.tipoVisita)} per ${visita
+                  .animale.nome}'),
           children: <Widget>[
             const Divider(),
             visitaField('🗓', 'Data',
@@ -129,15 +170,61 @@ class _ListaVisiteState extends State<ListaVisite> {
 
   eliminaVisita(Visita visitaDaEliminare) {
     Future<bool> res = VisiteService.deleteVisita(visitaDaEliminare);
-    res.then((successo) => {
-          if (successo)
-            {
-              setState(() {
-                visite = visite.then((visite_) => visite_
+    res.then((successo) =>
+    {
+      if (successo)
+        {
+          setState(() {
+            visite = visite.then((visite_) =>
+                visite_
                     .where((visita) => visita != visitaDaEliminare)
                     .toList());
-              })
-            }
+          })
+        }
+    });
+  }
+
+  DropdownButtonFormField<TipoVisita> buildSceltaTipoVisitaInputWidget() {
+    return DropdownButtonFormField(
+      hint: const Text("Tipo visita"),
+      value: tipoVisitaFiltrato,
+      items: [
+        const DropdownMenuItem(child: Text("Tutti"), value: null),
+        for (var tipo in TipoVisita.values)
+          DropdownMenuItem<TipoVisita>(
+            child: Text(Visita.tipoVisitaToString(tipo)),
+            value: tipo,
+          )
+      ],
+      onTap: () {},
+      onChanged: (value) {
+        setState(() {
+            tipoVisitaFiltrato = value;
         });
+      },
+    );
+  }
+
+  DropdownButtonFormField<Animale> buildSceltaAnimaleInputWidget() {
+    return DropdownButtonFormField(
+      hint: const Text("Animale"),
+      items: [
+        DropdownMenuItem<Animale>(
+          child: const Text("Tutti"),
+          value: Animale(id: 0, nome: "Tutti"),
+        ),
+        for (var animale in widget.utente.animali)
+          DropdownMenuItem<Animale>(
+            child: Text(animale.nome),
+            value: animale,
+          )
+      ],
+      onTap: () {},
+      onChanged: (Animale? newValue) {
+        setState(() {
+            animaleFiltrato = newValue;
+          });
+      },
+    );
   }
 }

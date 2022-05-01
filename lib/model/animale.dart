@@ -39,4 +39,12 @@ class Animale {
         peso = json['peso'],
         peloLungo = json['peloLungo'];
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Animale && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
+
 }

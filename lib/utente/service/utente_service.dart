@@ -4,7 +4,7 @@ import 'package:taass_frontend_android/model/utente.dart';
 import 'package:http/http.dart' as http;
 
 class UtenteService {
-  final String URL = "http://10.0.2.2:8080";
+  final String URL = "http://10.0.2.2:8079/utente";
 
   Future<Utente> getUtente(Utente utente) async {
     final response = await http.get(Uri.parse(URL + '/user/' + utente.email + '/' + utente.nome));

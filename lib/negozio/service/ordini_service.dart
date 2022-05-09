@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:taass_frontend_android/model/ordine.dart';
 
 class OrdiniService {
-  static const String baseUrl = 'http://10.0.2.2:8082/api/v1/ordini';
+  static const String baseUrl = 'http://10.0.2.2:8079/ordini';
 
   static Future<List<AnimaleOrdine>> getOrdini(int id) {
     Uri url = Uri.parse('${OrdiniService.baseUrl}/$id');

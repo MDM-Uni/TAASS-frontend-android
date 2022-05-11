@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'dart:developer' as developer;
 import 'dart:developer';
+
 import 'package:http/http.dart';
-import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 import 'package:taass_frontend_android/model/animale.dart';
 import 'package:taass_frontend_android/model/visita.dart';
-import 'package:http/http.dart' as http;
 
 class VisiteService {
-  static const String basicUrl = '10.0.2.2:8079';
+  static const String basicUrl = '10.0.2.2:8081';
 
-  static Future<List<Visita>> getVisite(
-      List<Animale> animaliDiUtente, int? idAnimale, TipoVisita? tipoVisita) async {
+  static Future<List<Visita>> getVisite(List<Animale> animaliDiUtente,
+      int? idAnimale, TipoVisita? tipoVisita) async {
     final Map<String, String> parametri = {};
     if (idAnimale != null && idAnimale > 0) {
       animaliDiUtente = animaliDiUtente

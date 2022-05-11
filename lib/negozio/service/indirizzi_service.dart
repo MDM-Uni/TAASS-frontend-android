@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:taass_frontend_android/model/indirizzo.dart';
 
 class IndirizziService {
-  static const String baseUrl = 'http://10.0.2.2:8079/indirizzi';
+  static const String baseUrl = 'http://10.0.2.2:8082/api/v1/indirizzi';
 
   static Future<List<Indirizzo>> getIndirizzi(int id) {
     Uri url = Uri.parse('${IndirizziService.baseUrl}/$id');

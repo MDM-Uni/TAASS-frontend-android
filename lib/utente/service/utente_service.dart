@@ -1,14 +1,16 @@
 import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 import 'package:taass_frontend_android/model/animale.dart';
 import 'package:taass_frontend_android/model/utente.dart';
-import 'package:http/http.dart' as http;
 
 class UtenteService {
-  final String URL = "http://10.0.2.2:8079/utente";
+  final String URL = "http://10.0.2.2:8080";
 
   Future<Utente> getUtente(Utente utente) async {
-    final response = await http.get(Uri.parse(URL + '/user/' + utente.email + '/' + utente.nome));
-    if(response.statusCode == 200) {
+    final response = await http
+        .get(Uri.parse(URL + '/user/' + utente.email + '/' + utente.nome));
+    if (response.statusCode == 200) {
       return Utente.fromJson(jsonDecode(response.body));
     }
     throw Exception('Failed to load user information');

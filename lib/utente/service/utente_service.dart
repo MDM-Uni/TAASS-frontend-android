@@ -5,7 +5,7 @@ import 'package:taass_frontend_android/model/animale.dart';
 import 'package:taass_frontend_android/model/utente.dart';
 
 class UtenteService {
-  final String URL = "http://10.0.2.2:8080";
+  final String URL = "http://10.0.2.2:8080/utente";
 
   Future<Utente> getUtente(Utente utente) async {
     final response = await http
